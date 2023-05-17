@@ -1,0 +1,36 @@
+import requests
+
+url = "http://www.mapquestapi.com/directions/v2/route"
+api_key = "PNi9xbk56Dtt47GyuyQEfLVZ7Fb1mqeN"
+
+while True:
+    
+    origin = input("Ingrese la ciudad de origen ('q' para salir): ")
+    if origin.lower() == 'q':
+        break
+    
+    destination = input("Ingrese la ciudad de destino: ")
+
+    unit = "k"
+
+    params = {
+        "key": api_key,
+        "from": origin,
+        "to": destination,
+        "unit": unit
+    }
+
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    distance = "{:.2f}".format(data["route"]["distance"])
+    duration = data["route"]["formattedTime"]
+
+    print(f"La distancia entre {origin} y {destination} es: {distance} kilómetros.")
+    print(f"La duración del viaje es: {duration}.")
+
+    print("Narrativa de viaje:")
+    for maneuver in data["route"]["legs"][0]["maneuvers"]:
+        print(maneuver["narrative"])
+
+
